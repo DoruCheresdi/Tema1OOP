@@ -1,2 +1,14 @@
 Starting audit...
+[ERROR] C:\Users\Doru\Documents\OOP\Tema1OOP\.\src\action\Action.java:9:21: '{' is not followed by whitespace. [WhitespaceAround]
+[ERROR] C:\Users\Doru\Documents\OOP\Tema1OOP\.\src\action\Action.java:9:22: '}' is not preceded with whitespace. [WhitespaceAround]
+[ERROR] C:\Users\Doru\Documents\OOP\Tema1OOP\.\src\data\DatabaseInput.java:12:14: Using the '.*' form of import should be avoided - fileio.*. [AvoidStarImport]
+[ERROR] C:\Users\Doru\Documents\OOP\Tema1OOP\.\src\data\DatabaseInput.java:22:28: '{' is not followed by whitespace. [WhitespaceAround]
+[ERROR] C:\Users\Doru\Documents\OOP\Tema1OOP\.\src\data\DatabaseInput.java:22:29: '}' is not preceded with whitespace. [WhitespaceAround]
+[ERROR] C:\Users\Doru\Documents\OOP\Tema1OOP\.\src\data\DatabaseInput.java:73:41: ':' should be on a new line. [OperatorWrap]
+[ERROR] C:\Users\Doru\Documents\OOP\Tema1OOP\.\src\main\Main.java:12:8: Unused import - java.io.DataInput. [UnusedImports]
+[ERROR] C:\Users\Doru\Documents\OOP\Tema1OOP\.\src\user\User.java:32:29: Parameter username should be final. [FinalParameters]
+[ERROR] C:\Users\Doru\Documents\OOP\Tema1OOP\.\src\user\User.java:48:33: Parameter subscription should be final. [FinalParameters]
+[ERROR] C:\Users\Doru\Documents\OOP\Tema1OOP\.\src\user\User.java:64:28: Parameter history should be final. [FinalParameters]
+[ERROR] C:\Users\Doru\Documents\OOP\Tema1OOP\.\src\user\User.java:80:30: Parameter favourite should be final. [FinalParameters]
 Audit done.
+Checkstyle ends with 11 errors.
