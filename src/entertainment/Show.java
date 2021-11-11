@@ -16,7 +16,7 @@ public class Show extends Video {
      */
     private List<Season> seasons;
 
-    public Show(final String name, final int year, final List<String> genres,
+    public Show(final String name, final int year, final List<Genre> genres,
                 final List<String> actors, final int numberSeasons,
                 final List<Season> seasons) {
         super(name, year, genres, actors);

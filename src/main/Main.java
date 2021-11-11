@@ -3,13 +3,14 @@ package main;
 import checker.Checkstyle;
 import checker.Checker;
 import common.Constants;
+import data.Database;
 import data.DatabaseInput;
 import fileio.Input;
 import fileio.InputLoader;
 import fileio.Writer;
 import org.json.simple.JSONArray;
+import solve.ActionSolver;
 
-import java.io.DataInput;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -72,9 +73,15 @@ public final class Main {
         Writer fileWriter = new Writer(filePath2);
         JSONArray arrayResult = new JSONArray();
 
-        //TODO add here the entry point to your implementation
+
         DatabaseInput databaseInput = new DatabaseInput();
         databaseInput.populateDatabase(input);
+
+        Database database = Database.getDatabase();
+        database.setDbJSONArray(arrayResult);
+
+        ActionSolver actionSolver = new ActionSolver();
+        actionSolver.solveActions();
 
         fileWriter.closeJSON(arrayResult);
     }

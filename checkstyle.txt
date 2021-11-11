@@ -1,14 +1,8 @@
 Starting audit...
-[ERROR] C:\Users\Doru\Documents\OOP\Tema1OOP\.\src\action\Action.java:9:21: '{' is not followed by whitespace. [WhitespaceAround]
-[ERROR] C:\Users\Doru\Documents\OOP\Tema1OOP\.\src\action\Action.java:9:22: '}' is not preceded with whitespace. [WhitespaceAround]
-[ERROR] C:\Users\Doru\Documents\OOP\Tema1OOP\.\src\data\DatabaseInput.java:12:14: Using the '.*' form of import should be avoided - fileio.*. [AvoidStarImport]
-[ERROR] C:\Users\Doru\Documents\OOP\Tema1OOP\.\src\data\DatabaseInput.java:22:28: '{' is not followed by whitespace. [WhitespaceAround]
-[ERROR] C:\Users\Doru\Documents\OOP\Tema1OOP\.\src\data\DatabaseInput.java:22:29: '}' is not preceded with whitespace. [WhitespaceAround]
-[ERROR] C:\Users\Doru\Documents\OOP\Tema1OOP\.\src\data\DatabaseInput.java:73:41: ':' should be on a new line. [OperatorWrap]
-[ERROR] C:\Users\Doru\Documents\OOP\Tema1OOP\.\src\main\Main.java:12:8: Unused import - java.io.DataInput. [UnusedImports]
-[ERROR] C:\Users\Doru\Documents\OOP\Tema1OOP\.\src\user\User.java:32:29: Parameter username should be final. [FinalParameters]
-[ERROR] C:\Users\Doru\Documents\OOP\Tema1OOP\.\src\user\User.java:48:33: Parameter subscription should be final. [FinalParameters]
-[ERROR] C:\Users\Doru\Documents\OOP\Tema1OOP\.\src\user\User.java:64:28: Parameter history should be final. [FinalParameters]
-[ERROR] C:\Users\Doru\Documents\OOP\Tema1OOP\.\src\user\User.java:80:30: Parameter favourite should be final. [FinalParameters]
+[ERROR] C:\Users\Doru\Documents\OOP\Tema1OOP\.\src\action\Command.java:27:5: Class 'Command' looks like designed for extension (can be subclassed), but the method 'solveAction' does not have javadoc that explains how to do that safely. If class is not designed for extension consider making the class 'Command' final or making the method 'solveAction' static/final/abstract/empty, or adding allowed annotation for the method. [DesignForExtension]
+[ERROR] C:\Users\Doru\Documents\OOP\Tema1OOP\.\src\action\Query.java:31:5: Class 'Query' looks like designed for extension (can be subclassed), but the method 'solveAction' does not have javadoc that explains how to do that safely. If class is not designed for extension consider making the class 'Query' final or making the method 'solveAction' static/final/abstract/empty, or adding allowed annotation for the method. [DesignForExtension]
+[ERROR] C:\Users\Doru\Documents\OOP\Tema1OOP\.\src\action\Recommendation.java:24:5: Class 'Recommendation' looks like designed for extension (can be subclassed), but the method 'solveAction' does not have javadoc that explains how to do that safely. If class is not designed for extension consider making the class 'Recommendation' final or making the method 'solveAction' static/final/abstract/empty, or adding allowed annotation for the method. [DesignForExtension]
+[ERROR] C:\Users\Doru\Documents\OOP\Tema1OOP\.\src\data\Database.java:9:8: Unused import - org.json.simple.JSONObject. [UnusedImports]
+[ERROR] C:\Users\Doru\Documents\OOP\Tema1OOP\.\src\data\Database.java:150:32: Parameter dbJSONArray should be final. [FinalParameters]
 Audit done.
-Checkstyle ends with 11 errors.
+Checkstyle ends with 5 errors.

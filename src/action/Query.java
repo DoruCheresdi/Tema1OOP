@@ -1,5 +1,9 @@
 package action;
 
+import common.Constants;
+import data.Database;
+import org.json.simple.JSONObject;
+
 import java.util.List;
 
 /**
@@ -22,5 +26,13 @@ public class Query extends Action {
         this.filters = filters;
         this.sortType = sortType;
         this.criteria = criteria;
+    }
+
+    @Override
+    public void solveAction() {
+        Database database = Database.getDatabase();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("message", Constants.QUERY);
+        database.getDbJSONArray().add(jsonObject);
     }
 }

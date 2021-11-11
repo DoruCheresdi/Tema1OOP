@@ -21,7 +21,7 @@ public class Video {
     /**
      * The genres of the video
      */
-    protected List<String> genres;
+    protected List<Genre> genres;
     /**
      * Actors in the movie
      */
@@ -34,7 +34,7 @@ public class Video {
         this.actors = null;
     }
 
-    public Video(final String name, final int year, final List<String> genres,
+    public Video(final String name, final int year, final List<Genre> genres,
                  final List<String> actors) {
         this.name = name;
         this.year = year;
@@ -62,7 +62,7 @@ public class Video {
      * getter for genres attribute
      * @return
      */
-    public List<String> getGenres() {
+    public List<Genre> getGenres() {
         return genres;
     }
 
@@ -70,7 +70,7 @@ public class Video {
      * setter for genres attribute
      * @param genres
      */
-    public void setGenres(final List<String> genres) {
+    public void setGenres(final List<Genre> genres) {
         this.genres = genres;
     }
 

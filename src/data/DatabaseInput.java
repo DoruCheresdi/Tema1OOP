@@ -6,11 +6,18 @@ import action.Query;
 import action.Recommendation;
 import actor.Actor;
 import common.Constants;
+import entertainment.Genre;
 import entertainment.Movie;
 import entertainment.Show;
 import entertainment.Video;
-import fileio.*;
+import fileio.MovieInputData;
+import fileio.ActionInputData;
+import fileio.ActorInputData;
+import fileio.SerialInputData;
+import fileio.UserInputData;
+import fileio.Input;
 import user.User;
+import utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +26,9 @@ import java.util.List;
  * Class that handles the initial input of data into the database
  */
 public class DatabaseInput {
-    public DatabaseInput() {}
+    public DatabaseInput() {
+
+    }
 
     /**
      * fills the database with data about videos,
@@ -37,18 +46,29 @@ public class DatabaseInput {
 
         for (MovieInputData movieData
                 : input.getMovies()) {
+            List<Genre> genres = new ArrayList<Genre>();
+            for (String genre
+                    : movieData.getGenres()) {
+                genres.add(Utils.stringToGenre(genre));
+            }
+
             Movie movie = new Movie(movieData.getTitle(), movieData.getYear(),
-                                    movieData.getGenres(), movieData.getCast(),
-                                    movieData.getDuration());
+                    genres, movieData.getCast(), movieData.getDuration());
             dbMovies.add(movie);
             dbVideos.add(movie);
         }
 
         for (SerialInputData showData
                 : input.getSerials()) {
+            List<Genre> genres = new ArrayList<Genre>();
+            for (String genre
+                    : showData.getGenres()) {
+                genres.add(Utils.stringToGenre(genre));
+            }
+
             Show show = new Show(showData.getTitle(), showData.getYear(),
-                    showData.getGenres(), showData.getCast(),
-                    showData.getNumberSeason(), showData.getSeasons());
+                    genres, showData.getCast(), showData.getNumberSeason(),
+                    showData.getSeasons());
             dbShows.add(show);
             dbVideos.add(show);
         }
@@ -70,19 +90,21 @@ public class DatabaseInput {
             dbActors.add(actor);
         }
 
-        for (ActionInputData actionData :
-                input.getCommands()) {
+        for (ActionInputData actionData
+                : input.getCommands()) {
             if (actionData.getActionType().equals(Constants.COMMAND)) {
                 Command command = new Command(actionData.getActionId(),
                         actionData.getType(), actionData.getUsername(),
                         actionData.getTitle(), actionData.getGrade());
                 dbActions.add(command);
+
             } else if (actionData.getActionType().equals(Constants.QUERY)) {
                 Query query = new Query(actionData.getActionId(),
                         actionData.getObjectType(), actionData.getNumber(),
                         actionData.getFilters(), actionData.getSortType(),
                         actionData.getCriteria());
                 dbActions.add(query);
+
             } else if (actionData.getActionType()
                     .equals(Constants.RECOMMENDATION)) {
                 Recommendation recommendation = new Recommendation(
@@ -91,5 +113,12 @@ public class DatabaseInput {
                 dbActions.add(recommendation);
             }
         }
+
+        database.setActions(dbActions);
+        database.setActors(dbActors);
+        database.setMovies(dbMovies);
+        database.setShows(dbShows);
+        database.setVideos(dbVideos);
+        database.setUsers(dbUsers);
     }
 }

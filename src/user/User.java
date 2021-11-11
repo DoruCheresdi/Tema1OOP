@@ -29,7 +29,7 @@ public class User {
      * setter for username attribute
      * @param username
      */
-    public void setUsername(String username) {
+    public void setUsername(final String username) {
         this.username = username;
     }
 
@@ -45,7 +45,7 @@ public class User {
      * setter for subscription attribute
      * @param subscription
      */
-    public void setSubscription(String subscription) {
+    public void setSubscription(final String subscription) {
         this.subscription = subscription;
     }
 
@@ -61,7 +61,7 @@ public class User {
      * setter for history attribute
      * @param history
      */
-    public void setHistory(Map<String, Integer> history) {
+    public void setHistory(final Map<String, Integer> history) {
         this.history = history;
     }
 
@@ -77,7 +77,7 @@ public class User {
      * setter for favourite attribute
      * @param favourite
      */
-    public void setFavourite(List<String> favourite) {
+    public void setFavourite(final List<String> favourite) {
         this.favourite = favourite;
     }
 }

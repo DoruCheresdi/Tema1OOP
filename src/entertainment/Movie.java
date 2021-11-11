@@ -15,13 +15,13 @@ public class Movie extends Video {
      */
     private List<Double> ratings;
 
-    public Movie(final String name, final int year, final List<String> genres,
+    public Movie(final String name, final int year, final List<Genre> genres,
                  final List<String> actors, final int duration) {
         super(name, year, genres, actors);
         this.duration = duration;
     }
 
-    public Movie(final String name, final int year, final List<String> genres,
+    public Movie(final String name, final int year, final List<Genre> genres,
                  final List<String> actors, final int duration,
                  final List<Double> ratings) {
         super(name, year, genres, actors);
