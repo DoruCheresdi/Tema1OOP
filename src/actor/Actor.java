@@ -1,8 +1,11 @@
 package actor;
 
+import data.Database;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Contains information about an actor
@@ -21,17 +24,46 @@ public class Actor {
      */
     private Map<ActorsAwards, Integer> awards;
     /**
-     * List of movies the actor has played in
+     * List of videos the actor has played in
      */
-    private List<String> movies;
+    private List<String> videos;
+    /**
+     * Average of the ratings of the videos the actor
+     * has played in
+     */
+    private Double rating;
 
     public Actor(final String name, final String description,
                  final Map<ActorsAwards, Integer> awards,
-                 final List<String> movies) {
+                 final List<String> videos) {
         this.name = name;
         this.description = description;
         this.awards = awards;
-        this.movies = movies;
+        this.videos = videos;
+    }
+
+    /**
+     * Method that updates an actor's rating by averaging the
+     * ratings of the videos he appeared in.
+     */
+    public void updateRating() {
+        Database database = Database.getDatabase();
+
+        rating = videos.stream().map(s -> database.getVideos().stream()
+                .filter(video -> video.getName().equals(s)).findAny().orElse(null))
+                .filter(Objects::nonNull)
+                .filter(video -> video.getRating() > 0)
+                .map(video -> video.getRating())
+                .mapToDouble(Double::doubleValue).average().orElse(0);
+    }
+
+    /**
+     * Method that returns the total number of awards of an actor
+     * @return total awards of actor
+     */
+    public int getAwardsNumber() {
+        return awards.entrySet().stream().map(entry -> entry.getValue())
+                .mapToInt(Integer::intValue).sum();
     }
 
     /**
@@ -80,5 +112,13 @@ public class Actor {
      */
     public void setAwards(final HashMap<ActorsAwards, Integer> awards) {
         this.awards = awards;
+    }
+
+    /**
+     * getter for rating attribute
+     * @return
+     */
+    public Double getRating() {
+        return rating;
     }
 }

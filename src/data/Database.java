@@ -6,7 +6,6 @@ import entertainment.Movie;
 import entertainment.Show;
 import entertainment.Video;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import user.User;
 
 import java.util.List;
@@ -147,7 +146,7 @@ public class Database {
      * setter for dbJSONArray attribute
      * @param dbJSONArray
      */
-    public void setDbJSONArray(JSONArray dbJSONArray) {
+    public void setDbJSONArray(final JSONArray dbJSONArray) {
         this.dbJSONArray = dbJSONArray;
     }
 }

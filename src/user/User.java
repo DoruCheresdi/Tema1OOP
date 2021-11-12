@@ -1,5 +1,9 @@
 package user;
 
+import entertainment.Video;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +12,7 @@ public class User {
     private String subscription;
     private Map<String, Integer> history;
     private List<String> favourite;
+    private Map<String, Integer> ratedVideos;
 
     public User(final String username, final String subscription,
                 final Map<String, Integer> history, final List<String> favourite) {
@@ -15,7 +20,9 @@ public class User {
         this.subscription = subscription;
         this.history = history;
         this.favourite = favourite;
+        this.ratedVideos = new HashMap<>();
     }
+
 
     /**
      * getter for username attribute
@@ -79,5 +86,13 @@ public class User {
      */
     public void setFavourite(final List<String> favourite) {
         this.favourite = favourite;
+    }
+
+    /**
+     * getter for ratedVideos attribute
+     * @return
+     */
+    public Map<String, Integer> getRatedVideos() {
+        return ratedVideos;
     }
 }

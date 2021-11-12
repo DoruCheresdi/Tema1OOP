@@ -2,13 +2,15 @@ package entertainment;
 
 
 
+import user.User;
+
 import java.util.List;
 
 
 /**
  * Contains general information about a video, whether movie or tv show
  */
-public class Video {
+public abstract class Video {
     /**
      * Name of the video
      */
@@ -41,6 +43,28 @@ public class Video {
         this.genres = genres;
         this.actors = actors;
     }
+
+    /**
+     * Method to add a rating to a video
+     * @param rating rating to be added
+     * @param season season to which to add the rating
+     */
+    public abstract void addRating(Double rating, int season);
+
+    /**
+     * Method that returns the rating of the video
+     * @return
+     */
+    public abstract Double getRating();
+
+    /**
+     * Method that determines if a video has been rated by a
+     * certain user
+     * @param user which we want to know if they have rated
+     * @param season that user would have rated
+     * @return
+     */
+    public abstract boolean hasBeenRated(final User user, final int season);
 
     /**
      * getter for name attribute

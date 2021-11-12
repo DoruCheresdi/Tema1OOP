@@ -95,7 +95,8 @@ public class DatabaseInput {
             if (actionData.getActionType().equals(Constants.COMMAND)) {
                 Command command = new Command(actionData.getActionId(),
                         actionData.getType(), actionData.getUsername(),
-                        actionData.getTitle(), actionData.getGrade());
+                        actionData.getTitle(), actionData.getGrade(),
+                        actionData.getSeasonNumber());
                 dbActions.add(command);
 
             } else if (actionData.getActionType().equals(Constants.QUERY)) {

@@ -1,6 +1,8 @@
 package entertainment;
 
 
+import user.User;
+
 import java.util.List;
 
 /**
@@ -22,6 +24,44 @@ public class Show extends Video {
         super(name, year, genres, actors);
         this.numberSeasons = numberSeasons;
         this.seasons = seasons;
+    }
+
+    /**
+     * Method to add a rating to a season
+     * @param rating rating to be added
+     * @param season season to which to add the rating
+     */
+    @Override
+    public void addRating(final Double rating, final int season) {
+        seasons.get(season - 1).getRatings().add(rating);
+    }
+
+    /**
+     * Method that calculates the rating of a show
+     * @return rating
+     */
+    @Override
+    public Double getRating() {
+        return seasons.stream().filter(season -> season.getRatings().size() > 0)
+                .map(season -> season.getRatings().stream()
+                .reduce(0.0, Double::sum) / season.getRatings().size())
+                .reduce(0.0, Double::sum) / seasons.size();
+    }
+
+    /**
+     * Method that determines if a show has been rated by a
+     * certain user
+     * @param user which we want to know if they have rated
+     * @param season that user would have rated
+     * @return
+     */
+    public boolean hasBeenRated(final User user, final int season) {
+        if (user.getRatedVideos().containsKey(name)) {
+            if (user.getRatedVideos().get(name) == season) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
