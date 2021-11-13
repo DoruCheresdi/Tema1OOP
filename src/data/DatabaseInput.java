@@ -38,8 +38,8 @@ public class DatabaseInput {
     public void populateDatabase(final Input input) {
         Database database = Database.getDatabase();
         List<Video> dbVideos = new ArrayList<>();
-        List<Movie> dbMovies = new ArrayList<>();
-        List<Show> dbShows = new ArrayList<>();
+        List<Video> dbMovies = new ArrayList<>();
+        List<Video> dbShows = new ArrayList<>();
         List<User> dbUsers = new ArrayList<>();
         List<Actor> dbActors = new ArrayList<>();
         List<Action> dbActions = new ArrayList<>();

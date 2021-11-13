@@ -23,6 +23,13 @@ public class User {
         this.ratedVideos = new HashMap<>();
     }
 
+    /**
+     * Method that calculates the number of ratings that the user has given
+     * @return number of ratings
+     */
+    public Integer getNumberOfRatings() {
+        return ratedVideos.size();
+    }
 
     /**
      * getter for username attribute

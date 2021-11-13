@@ -2,8 +2,6 @@ package data;
 
 import action.Action;
 import actor.Actor;
-import entertainment.Movie;
-import entertainment.Show;
 import entertainment.Video;
 import org.json.simple.JSONArray;
 import user.User;
@@ -19,8 +17,8 @@ public class Database {
      */
     private static Database database;
     private List<Video> videos;
-    private List<Movie> movies;
-    private List<Show> shows;
+    private List<Video> movies;
+    private List<Video> shows;
     private List<Actor> actors;
     private List<Action> actions;
     private List<User> users;
@@ -58,7 +56,7 @@ public class Database {
      * getter for movies attribute
      * @return movies
      */
-    public List<Movie> getMovies() {
+    public List<Video> getMovies() {
         return movies;
     }
 
@@ -66,7 +64,7 @@ public class Database {
      * setter for movies attribute
      * @param movies
      */
-    public void setMovies(final List<Movie> movies) {
+    public void setMovies(final List<Video> movies) {
         this.movies = movies;
     }
 
@@ -74,7 +72,7 @@ public class Database {
      * getter for shows attribute
      * @return shows
      */
-    public List<Show> getShows() {
+    public List<Video> getShows() {
         return shows;
     }
 
@@ -82,7 +80,7 @@ public class Database {
      * setter for shows attribute
      * @param shows
      */
-    public void setShows(final List<Show> shows) {
+    public void setShows(final List<Video> shows) {
         this.shows = shows;
     }
 

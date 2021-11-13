@@ -70,6 +70,7 @@ public class Movie extends Video {
      * getter for duration attribute
      * @return duration attribute
      */
+    @Override
     public int getDuration() {
         return duration;
     }

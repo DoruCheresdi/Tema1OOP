@@ -64,6 +64,14 @@ public class Show extends Video {
         return false;
     }
 
+    public int getDuration() {
+        int duration = 0;
+        for (Season season :
+                seasons) {
+            duration += season.getDuration();
+        }
+        return duration;
+    }
     /**
      * getter for numberSeasons attribute
      * @return

@@ -92,15 +92,15 @@ public class Command extends Action {
      */
     private void solveViewCommand() {
         User soughtUser = findUser();
-        if (soughtUser.getHistory().containsKey(user)) {
+        if (soughtUser.getHistory().containsKey(title)) {
             soughtUser.getHistory()
-                    .put(user, soughtUser.getHistory().get(user) + 1);
+                    .put(title, soughtUser.getHistory().get(title) + 1);
         } else {
-            soughtUser.getHistory().put(user, 1);
+            soughtUser.getHistory().put(title, 1);
         }
 
         addMessageToJson("success -> " + title
-                + " was viewed with total views of 1");
+                + " was viewed with total views of " + soughtUser.getHistory().get(title));
     }
 
     private void solveRatingCommand() {

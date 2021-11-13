@@ -67,6 +67,12 @@ public abstract class Video {
     public abstract boolean hasBeenRated(final User user, final int season);
 
     /**
+     * Method that determines and returns the durations of a video
+     * @return duration of video
+     */
+    public abstract int getDuration();
+
+    /**
      * getter for name attribute
      * @return
      */
