@@ -3,9 +3,7 @@ package action;
 import common.Constants;
 import data.Database;
 import entertainment.Genre;
-import entertainment.Movie;
 import entertainment.Video;
-import org.json.simple.JSONObject;
 import user.User;
 import utils.PairGenreInteger;
 import utils.PairStringInteger;
@@ -21,8 +19,17 @@ import java.util.stream.Collectors;
  * the recommendation action
  */
 public class Recommendation extends Action {
+    /**
+     * type of recommendation to be made
+     */
     private String type;
+    /**
+     * the user the recommendations is made for
+     */
     private String username;
+    /**
+     * Genre by which to search for SearchRecommendation
+     */
     private String genre;
 
     public Recommendation(final int actionID, final String type,
@@ -60,6 +67,10 @@ public class Recommendation extends Action {
         }
     }
 
+    /**
+     * Method that implements a recommendation that returns the first unseen
+     * video in the database
+     */
     private void standardRecommendation() {
         Database database = Database.getDatabase();
         User soughtUser = findUser();
@@ -80,6 +91,11 @@ public class Recommendation extends Action {
         addMessageToJson("StandardRecommendation result: " + recommendedVideo.getName());
     }
 
+    /**
+     * Method that finds the user object that is the target of the
+     * recommendation
+     * @return
+     */
     private User findUser() {
         Database database = Database.getDatabase();
         User soughtUser = database.getUsers().stream()
@@ -88,14 +104,10 @@ public class Recommendation extends Action {
         return soughtUser;
     }
 
-    private void addMessageToJson(final String message) {
-        Database database = Database.getDatabase();
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put(Constants.MESSAGE, message);
-        jsonObject.put("id", actionID);
-        database.getDbJSONArray().add(jsonObject);
-    }
-
+    /**
+     * Method that implements recommendations that return the first unseen
+     * video in the database with the highest rating
+     */
     private void bestUnseenRecommendation() {
         Database database = Database.getDatabase();
         User soughtUser = findUser();
@@ -111,7 +123,9 @@ public class Recommendation extends Action {
                         return 1;
                     } else if (video1.getRating() > video2.getRating()) {
                         return -1;
-                    } else return getVideoIndex(video1) - getVideoIndex(video2);
+                    } else {
+                        return getVideoIndex(video1) - getVideoIndex(video2);
+                    }
                 }).findFirst().orElse(null);
 
         if (recommendedVideo == null) {
@@ -122,16 +136,20 @@ public class Recommendation extends Action {
         addMessageToJson("BestRatedUnseenRecommendation result: " + recommendedVideo.getName());
     }
 
-    private int getMovieIndex(Movie movie) {
-        Database database = Database.getDatabase();
-        return database.getMovies().indexOf(movie);
-    }
-
-    private Integer getVideoIndex(Video video) {
+    /**
+     * Method that returns the index of the video in the database
+     * @param video
+     * @return
+     */
+    private Integer getVideoIndex(final Video video) {
         Database database = Database.getDatabase();
         return database.getVideos().indexOf(video);
     }
 
+    /**
+     * Method that implements recommendations that return the fist video from
+     * the database from the genre with the most views
+     */
     private void popularRecommendation() {
         Database database = Database.getDatabase();
         User soughtUser = findUser();
@@ -146,17 +164,17 @@ public class Recommendation extends Action {
 
         // calculate the number of views each genre has:
         List<PairGenreInteger> genreViewsList = new ArrayList<>();
-        for (User user :
-                database.getUsers()) {
-            for (Map.Entry<String, Integer> entry:
-                    user.getHistory().entrySet()){
+        for (User user
+                : database.getUsers()) {
+            for (Map.Entry<String, Integer> entry
+                    : user.getHistory().entrySet()) {
                 Video videoWithGenres = database.getVideos().stream()
                         .filter(video ->
                                 video.getName().equals(entry.getKey()))
                         .findAny().orElse(null);
 
-                for (Genre genre :
-                        videoWithGenres.getGenres()) {
+                for (Genre genre
+                        : videoWithGenres.getGenres()) {
                     if (genreViewsList.stream()
                             .anyMatch(pair -> pair.getKey().equals(genre))) {
 
@@ -184,8 +202,8 @@ public class Recommendation extends Action {
 
         // find the video to be recommended, if it exists:
         Video recommendedVideo = null;
-        for (PairGenreInteger pair :
-                sortedList) {
+        for (PairGenreInteger pair
+                : sortedList) {
             recommendedVideo = database.getVideos().stream()
                     .filter(video -> video.getGenres().contains(pair.getKey()))
                     .filter(video -> !soughtUser.getHistory()
@@ -204,6 +222,10 @@ public class Recommendation extends Action {
         addMessageToJson("PopularRecommendation result: " + recommendedVideo.getName());
     }
 
+    /**
+     * Method that implements recommendations that return the video first video
+     * in the database that has been added the most times to favorites.
+     */
     private void favoriteRecommendation() {
         Database database = Database.getDatabase();
 
@@ -214,10 +236,10 @@ public class Recommendation extends Action {
 
         // calculate the number of users that added a video to favorites
         List<PairStringInteger> videoPairList = new ArrayList<>();
-        for (User user :
-                database.getUsers()) {
-            for (String videoName :
-                    user.getFavourite()) {
+        for (User user
+                : database.getUsers()) {
+            for (String videoName
+                    : user.getFavourite()) {
                 if (videoPairList.stream()
                         .anyMatch(pair -> pair.getKey().equals(videoName))) {
                     PairStringInteger pair = videoPairList.stream()
@@ -256,6 +278,11 @@ public class Recommendation extends Action {
         addMessageToJson("FavoriteRecommendation result: " + recommendedVideo.getName());
     }
 
+    /**
+     * Method that returns the video object with the videoName name
+     * @param videoName name of the video searched for
+     * @return video object searched for
+     */
     private Video getVideoWithName(final String videoName) {
         Database database = Database.getDatabase();
         return database.getVideos().stream()
@@ -263,10 +290,15 @@ public class Recommendation extends Action {
                 .findAny().orElse(null);
     }
 
+    /**
+     * Method that implements a recommendation that returns all unseen videos
+     * from a certain genre, sorted by rating and name.
+     */
     private void searchRecommendation() {
         Database database = Database.getDatabase();
         User soughtUser = findUser();
 
+        // get list of recommended videos from database:
         List<Video> recommendedVideos = database.getVideos().stream()
                 .filter(video -> video.getGenres()
                         .contains(Utils.stringToGenre(genre)))
@@ -277,7 +309,9 @@ public class Recommendation extends Action {
                         return 1;
                     } else if (video1.getRating() < video2.getRating()) {
                         return -1;
-                    } else return video1.getName().compareTo(video2.getName());
+                    } else {
+                        return video1.getName().compareTo(video2.getName());
+                    }
         }).collect(Collectors.toList());
 
         if (recommendedVideos.size() == 0) {
@@ -285,25 +319,12 @@ public class Recommendation extends Action {
             return;
         }
 
-        addListOfVideosToJson("SearchRecommendation result: ",
+        addListOfVideosToJson("SearchRecommendation result: [",
                 recommendedVideos);
     }
 
     private void addListOfVideosToJson(final String initialMessage, final List<Video> videos) {
-        String message = initialMessage;
-        message = message + "[";
-
-        int firstElement = 1;
-        for (Video video
-                : videos) {
-            if (firstElement == 1) {
-                firstElement = 0;
-                message = message + video.getName();
-            } else {
-                message = message + ", " + video.getName();
-            }
-        }
-        message = message + "]";
+        String message = getMessageFromVideos(videos, initialMessage);
 
         addMessageToJson(message);
     }

@@ -3,6 +3,7 @@ package data;
 import action.Action;
 import actor.Actor;
 import entertainment.Video;
+import fileio.Writer;
 import org.json.simple.JSONArray;
 import user.User;
 
@@ -16,13 +17,38 @@ public class Database {
      * Database instance, follows Singleton Pattern
      */
     private static Database database;
+    /**
+     * List of all video objects
+     */
     private List<Video> videos;
+    /**
+     * List of movie objects
+     */
     private List<Video> movies;
+    /**
+     * List of all show objects
+     */
     private List<Video> shows;
+    /**
+     * List of all actor objects
+     */
     private List<Actor> actors;
+    /**
+     * List of all action objects
+     */
     private List<Action> actions;
+    /**
+     * List of all users objects
+     */
     private List<User> users;
+    /**
+     * JSON array where action output is stored
+     */
     private JSONArray dbJSONArray;
+    /**
+     * writer used to populate dbJSONArray
+     */
+    private Writer writer;
 
     /**
      * Method to return instance
@@ -146,5 +172,21 @@ public class Database {
      */
     public void setDbJSONArray(final JSONArray dbJSONArray) {
         this.dbJSONArray = dbJSONArray;
+    }
+
+    /**
+     * getter for writer attribute
+     * @return
+     */
+    public Writer getWriter() {
+        return writer;
+    }
+
+    /**
+     * setter for writer attribute
+     * @param writer
+     */
+    public void setWriter(final Writer writer) {
+        this.writer = writer;
     }
 }

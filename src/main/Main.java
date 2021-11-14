@@ -79,6 +79,7 @@ public final class Main {
 
         Database database = Database.getDatabase();
         database.setDbJSONArray(arrayResult);
+        database.setWriter(fileWriter);
 
         ActionSolver actionSolver = new ActionSolver();
         actionSolver.solveActions();

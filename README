@@ -1,11 +1,46 @@
-Object Oriented Programming Course
-Homework - VideosDB
+Doru Cheresdi
+doru.cheresdi@gmail.com
 
-November 2021
+Programare Orientata pe Obiecte
+Tema1 - VideosDB
 
-# Info
-https://ocw.cs.pub.ro/courses/poo-ca-cd/teme/tema
+# Despre functionarea programului
 
-# About the code
+Informatiile despre useri, video-uri si actiuni sunt stocate intr-o instanta
+unica a clasei Database pentru care am folosit Singleton Pattern.
 
-Hello world
+Programul stocheaza toate informatiile in database prin intermediul metodei
+DatabaseInput.populateDatabase(). Rezolvarea efectiva a actiunilor(comenzi +
+queries + recomandari) este efectuata de clasa ActionSolver, care pentru
+fiecare actiune apeleaza prin poliformism metodele specifice de rezolvare a
+fiecaruia dintre cele 3 tipuri de actiuni.
+
+Dupa efectuarea comenzii, metoda de rezolvare a fiecareia dintre acestea scrie
+output-ul in Array-ul de obiecte JSON a carui referinte este stocat in
+database.
+
+# Componentele solutiei
+
+Clasa Action este o clasa abstracta care este mostenita de 3 clase reprezentand
+cele 3 tipuri de actiuni. Astfel rezolvarea lor poate fi apelata din clasa
+ActionSolver prin acelasi apel de functie prin polimorifsm. Clasele de actiuni
+Command, Query, Recommendation mai contin si metodele pentru rezolvarea
+acestora, precum si metode auxiliare.
+
+Clasa Video este o clasa abstracta mostenita de Clasele Movie si Show. Aceasta
+structura are menirea de a facilita manipularea comuna a filmelor si serialelor
+apelandu-se aceleasi functii implementate diferit. Totusi am considerat necesar
+si pastrarea referintelor obiectelor in liste dedicate pentru filme si seriale
+pentru a putea efectua query-uri(care se aplica doar pe un tip de obiect) fara
+a folosi instanceof pentru a verifica tipul obiectelor din lista de video-uri.
+
+Rezolvarea actiunilor se face accesand si modificand instanta unica a clasei
+Database, folosind campurile clasei pentru a efectua cautari sau sortari.
+
+Pentru rezolvarea Query-urilor care necesita memorarea numarului de vizualizari
+ai unui video am folosit o clasa de tip Pair pentru a stoca informatiile si
+pentru a aplica sortarile pe ele folosind API-ul Stream.
+
+Pentru rezolvarea recomandarii care necesita memorarea numarului de vizualizari
+per gen de video am folosit o structura de tip pair cu un camp Genre si un camp
+Integer.

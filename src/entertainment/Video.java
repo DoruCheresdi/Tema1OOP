@@ -64,7 +64,7 @@ public abstract class Video {
      * @param season that user would have rated
      * @return
      */
-    public abstract boolean hasBeenRated(final User user, final int season);
+    public abstract boolean hasBeenRated(User user, int season);
 
     /**
      * Method that determines and returns the durations of a video

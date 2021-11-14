@@ -64,10 +64,14 @@ public class Show extends Video {
         return false;
     }
 
+    /**
+     * Method that computes and the duration of a show as sum of its seasons
+     * @return total duration of the show
+     */
     public int getDuration() {
         int duration = 0;
-        for (Season season :
-                seasons) {
+        for (Season season
+                : seasons) {
             duration += season.getDuration();
         }
         return duration;

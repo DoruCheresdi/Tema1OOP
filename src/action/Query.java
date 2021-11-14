@@ -5,7 +5,6 @@ import actor.ActorsAwards;
 import common.Constants;
 import data.Database;
 import entertainment.Video;
-import org.json.simple.JSONObject;
 import user.User;
 import utils.PairStringInteger;
 import utils.Utils;
@@ -18,10 +17,26 @@ import java.util.stream.Collectors;
  * the query action
  */
 public class Query extends Action {
+    /**
+     * Type of objects to apply query on
+     */
     private String objectType;
+    /**
+     * Maximum number of results per query
+     */
     private Integer number;
+    /**
+     * List containing 4 lists of string, containing the year, the genres, the
+     * words and the awards to make the query by
+     */
     private List<List<String>> filters;
+    /**
+     * Type of sorting to be made, ascending or descending
+     */
     private String sortType;
+    /**
+     * Criteria by which the query is made
+     */
     private String criteria;
 
     public Query(final int actionID, final String objectType, final int number,
@@ -73,9 +88,9 @@ public class Query extends Action {
     }
 
     /**
-     * Method that implements a query of actors sorted
-     * by the ratings of the videos they have played in.
-     * If two actors are
+     * Method that implements a query of actors sorted by the ratings of the
+     * videos they have played in and the second criteria is alphabetically
+     * by their names.
      */
     private void averageQuery() {
         Database database = Database.getDatabase();
@@ -84,7 +99,7 @@ public class Query extends Action {
             actor.updateRating();
         }
 
-        if (sortType.equals("asc")) {
+        if (sortType.equals(Constants.ASC)) {
             List<Actor> sortList = database.getActors().stream()
                     .filter(actor -> actor.getRating() > 0).sorted((o1, o2) -> {
                 if (o1.getRating() > o2.getRating()) {
@@ -113,30 +128,14 @@ public class Query extends Action {
         }
     }
 
-    private void addActorQueryToJson(final List<Actor> list) {
-        Database database = Database.getDatabase();
-        JSONObject jsonObject = new JSONObject();
-
-        String message = new String("Query result: [");
-        int firstElement = 1;
-        for (Actor actor
-                : list) {
-            if (firstElement == 1) {
-                firstElement = 0;
-                message = message + actor.getName();
-            } else {
-                message = message + ", " + actor.getName();
-            }
-        }
-        message = message + "]";
-
-        jsonObject.put(Constants.MESSAGE, message);
-        jsonObject.put("id", actionID);
-        database.getDbJSONArray().add(jsonObject);
-    }
-
+    /**
+     * Method that implements a query of actors by the awards they have
+     * received. It sorts all query results by the total number of
+     * awards they have received.
+     */
     private void awardsQuery() {
         Database database = Database.getDatabase();
+
         List<Actor> sortList = database.getActors().stream()
                 .filter(actor -> containsAllAwards(actor))
                 .sorted((actor1, actor2) -> {
@@ -166,17 +165,10 @@ public class Query extends Action {
         addActorQueryToJson(sortList);
     }
 
-    private boolean containsAllAwards(final Actor actor) {
-        for (String awardString
-                : filters.get(Constants.FILTER_AWARDS_NR)) {
-            ActorsAwards award = Utils.stringToAwards(awardString);
-            if (!actor.getAwards().containsKey(award)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
+    /**
+     * Method that implements a query that returns actors that have all the
+     * keywords in their description. Sorts the results by name.
+     */
     private void filterQuery() {
         Database database = Database.getDatabase();
         List<Actor> sortList = database.getActors().stream()
@@ -193,45 +185,9 @@ public class Query extends Action {
     }
 
     /**
-     * checks if an author's description contains all the keywords of the
-     * query
-     * @param actor
-     * @return
+     * Method that implements a query of videos sorted firstly by rating
+     * and secondly by name
      */
-    private boolean hasAllKeywords(final Actor actor) {
-        String description = actor.getDescription()
-                                     .toLowerCase();
-
-
-
-        for (String keyword
-                : filters.get(Constants.FILTER_WORDS_NR)) {
-            int isFound = 0;
-            if (description.contains(" " + keyword.toLowerCase() + " ")) {
-                isFound = 1;
-            }
-            if (description.contains("-" + keyword.toLowerCase() + " ")) {
-                isFound = 1;
-            }
-            if (description.contains(" " + keyword.toLowerCase() + "-")) {
-                isFound = 1;
-            }
-            if (description.contains("-" + keyword.toLowerCase() + "-")) {
-                isFound = 1;
-            }
-            if (description.contains(" " + keyword.toLowerCase() + ",")) {
-                isFound = 1;
-            }
-            if (description.contains(" " + keyword.toLowerCase() + ".")) {
-                isFound = 1;
-            }
-            if (isFound == 0) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     private void ratingQuery() {
         Database database = Database.getDatabase();
 
@@ -269,63 +225,16 @@ public class Query extends Action {
         addVideoQueryToJson(sortList);
     }
 
-    private boolean videoHasYear(final Video video) {
-        if (filters.get(0).get(0) != null) {
-            return video.getYear() == Integer.parseInt(filters.get(0).get(0));
-        }
-        return true;
-    }
-
-    private boolean videoHasGenre(final Video video) {
-        if (filters.get(1).get(0) != null) {
-            return video.getGenres()
-                    .contains(Utils.stringToGenre(filters.get(1).get(0)));
-        }
-        return true;
-    }
-
-    private void addVideoQueryToJson(final List<Video> list) {
-        Database database = Database.getDatabase();
-        JSONObject jsonObject = new JSONObject();
-
-        String message = new String("Query result: [");
-        int firstElement = 1;
-        for (Video video
-                : list) {
-            if (firstElement == 1) {
-                firstElement = 0;
-                message = message + video.getName();
-            } else {
-                message = message + ", " + video.getName();
-            }
-        }
-        message = message + "]";
-
-        jsonObject.put(Constants.MESSAGE, message);
-        jsonObject.put("id", actionID);
-        database.getDbJSONArray().add(jsonObject);
-    }
-
+    /**
+     * Method that implements a query of videos sorted by the number of
+     * times the video has been added to favorites by a user. Second sort
+     * criteria is name.
+     */
     private void favoriteQuery() {
         Database database = Database.getDatabase();
-        List<PairStringInteger> listToSort = new ArrayList<>();
+        List<PairStringInteger> listToSort = getPairStringIntegers();
 
-        if (objectType.equals(Constants.MOVIES)) {
-            for (Video movie
-                    : database.getMovies()) {
-                if (videoHasYear(movie) && videoHasGenre(movie)) {
-                    listToSort.add(new PairStringInteger(movie.getName(), 0));
-                }
-            }
-        } else {
-            for (Video show
-                    : database.getShows()) {
-                if (videoHasYear(show) && videoHasGenre(show)) {
-                    listToSort.add(new PairStringInteger(show.getName(), 0));
-                }
-            }
-        }
-
+        // determine how many times each video was added to favorites:
         for (User user
                 : database.getUsers()) {
             for (String videoName
@@ -368,6 +277,10 @@ public class Query extends Action {
         addVideoQueryToJson(videoSortedList);
     }
 
+    /**
+     * Method that implements a query of videos sorted by their duration,
+     * second criteria is name
+     */
     private void longestQuery() {
         Database database = Database.getDatabase();
 
@@ -404,26 +317,15 @@ public class Query extends Action {
         addVideoQueryToJson(sortList);
     }
 
+    /**
+     * Method that implements a query of videos sorted by the number of times
+     * they have been viewed, second criteria is name
+     */
     private void mostViewedQuery() {
         Database database = Database.getDatabase();
-        List<PairStringInteger> listToSort = new ArrayList<>();
+        List<PairStringInteger> listToSort = getPairStringIntegers();
 
-        if (objectType.equals(Constants.MOVIES)) {
-            for (Video movie
-                    : database.getMovies()) {
-                if (videoHasYear(movie) && videoHasGenre(movie)) {
-                    listToSort.add(new PairStringInteger(movie.getName(), 0));
-                }
-            }
-        } else {
-            for (Video show
-                    : database.getShows()) {
-                if (videoHasYear(show) && videoHasGenre(show)) {
-                    listToSort.add(new PairStringInteger(show.getName(), 0));
-                }
-            }
-        }
-
+        // determine how many times each video has been viewed:
         for (User user
                 : database.getUsers()) {
             for (Map.Entry<String, Integer> entry
@@ -468,6 +370,37 @@ public class Query extends Action {
         addVideoQueryToJson(videoSortedList);
     }
 
+    /**
+     * Method that returns a list of either all movies or all shows depending
+     * on which type of data the query is done on
+     * @return Pair data structure containing the videos
+     */
+    private List<PairStringInteger> getPairStringIntegers() {
+        Database database = Database.getDatabase();
+        List<PairStringInteger> listToSort = new ArrayList<>();
+
+        if (objectType.equals(Constants.MOVIES)) {
+            for (Video movie
+                    : database.getMovies()) {
+                if (videoHasYear(movie) && videoHasGenre(movie)) {
+                    listToSort.add(new PairStringInteger(movie.getName(), 0));
+                }
+            }
+        } else {
+            for (Video show
+                    : database.getShows()) {
+                if (videoHasYear(show) && videoHasGenre(show)) {
+                    listToSort.add(new PairStringInteger(show.getName(), 0));
+                }
+            }
+        }
+        return listToSort;
+    }
+
+    /**
+     * Method that implements a query of users based on how many ratings they
+     * have given
+     */
     private void numRatingsQuery() {
         Database database = Database.getDatabase();
 
@@ -498,25 +431,102 @@ public class Query extends Action {
         addUserQueryToJson(sortedUserList);
     }
 
+    /**
+     * Method that writes to output JSON array the result of the user query
+     * @param list
+     */
     private void addUserQueryToJson(final List<User> list) {
-        Database database = Database.getDatabase();
-        JSONObject jsonObject = new JSONObject();
+        String message = getMessageFromUsers(list, "Query result: [");
+        addMessageToJson(message);
+    }
 
-        String message = new String("Query result: [");
-        int firstElement = 1;
-        for (User user
-                : list) {
-            if (firstElement == 1) {
-                firstElement = 0;
-                message = message + user.getUsername();
-            } else {
-                message = message + ", " + user.getUsername();
+    /**
+     * checks if an author's description contains all the keywords of the
+     * query
+     * @param actor the actor whose description must be searched
+     * @return whether it contains all keywords
+     */
+    private boolean hasAllKeywords(final Actor actor) {
+        String description = actor.getDescription()
+                .toLowerCase();
+
+        for (String keyword
+                : filters.get(Constants.FILTER_WORDS_NR)) {
+            int isFound = 0;
+
+            StringTokenizer tokenizer = new StringTokenizer(description, ".,- ");
+            while (tokenizer.hasMoreTokens()) {
+                if (tokenizer.nextToken().equals(keyword)) {
+                    isFound = 1;
+                }
+            }
+
+            if (isFound == 0) {
+                return false;
             }
         }
-        message = message + "]";
-
-        jsonObject.put(Constants.MESSAGE, message);
-        jsonObject.put("id", actionID);
-        database.getDbJSONArray().add(jsonObject);
+        return true;
     }
+
+    /**
+     * Method that writes to output JSON array the result of the actor query
+     * @param list
+     */
+    private void addActorQueryToJson(final List<Actor> list) {
+        String message = getMessageFromActors(list, "Query result: [");
+        addMessageToJson(message);
+    }
+
+    /**
+     * Method that determines if an actor has all the awards of a query by
+     * awards
+     * @param actor
+     * @return
+     */
+    private boolean containsAllAwards(final Actor actor) {
+        for (String awardString
+                : filters.get(Constants.FILTER_AWARDS_NR)) {
+            ActorsAwards award = Utils.stringToAwards(awardString);
+            if (!actor.getAwards().containsKey(award)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Method that determines if a video was produced in a certain year
+     * @param video
+     * @return
+     */
+    private boolean videoHasYear(final Video video) {
+        if (filters.get(0).get(0) != null) {
+            return video.getYear() == Integer.parseInt(filters.get(0).get(0));
+        }
+        return true;
+    }
+
+    /**
+     * Method that determines if a video is of a certain genre
+     * @param video
+     * @return
+     */
+    private boolean videoHasGenre(final Video video) {
+        if (filters.get(1).get(0) != null) {
+            return video.getGenres()
+                    .contains(Utils.stringToGenre(filters.get(1).get(0)));
+        }
+        return true;
+    }
+
+    /**
+     * Method that writes to output JSON array the result of the video query
+     * @param list
+     */
+    private void addVideoQueryToJson(final List<Video> list) {
+        String message = getMessageFromVideos(list, "Query result: [");
+        addMessageToJson(message);
+    }
+
+
 }

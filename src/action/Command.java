@@ -3,7 +3,6 @@ package action;
 import common.Constants;
 import data.Database;
 import entertainment.Video;
-import org.json.simple.JSONObject;
 import user.User;
 
 /**
@@ -49,21 +48,6 @@ public class Command extends Action {
 
     }
 
-    private User findUser() {
-        Database database = Database.getDatabase();
-        User soughtUser = database.getUsers().stream()
-                .filter(user1 -> user1.getUsername().equals(user))
-                .findAny().get();
-        return soughtUser;
-    }
-
-    private void addMessageToJson(final String message) {
-        Database database = Database.getDatabase();
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put(Constants.MESSAGE, message);
-        jsonObject.put("id", actionID);
-        database.getDbJSONArray().add(jsonObject);
-    }
 
     /**
      * Method to solve commands of the favorite type,
@@ -72,6 +56,8 @@ public class Command extends Action {
      */
     private void solveFavoriteCommand() {
         User soughtUser = findUser();
+
+        // check if video is seen or already in the favorite list:
         if (!soughtUser.getHistory().containsKey(title)) {
             addMessageToJson("error -> " + title + " is not seen");
             return;
@@ -103,6 +89,11 @@ public class Command extends Action {
                 + " was viewed with total views of " + soughtUser.getHistory().get(title));
     }
 
+    /**
+     * Method to add a rating to a video.
+     * It checks if the video has been seen or if it has already been rated by the
+     * user
+     */
     private void solveRatingCommand() {
         User soughtUser = findUser();
         if (!soughtUser.getHistory().containsKey(title)) {
@@ -123,5 +114,17 @@ public class Command extends Action {
         videoToRate.addRating(grade, season);
         addMessageToJson("success -> " + title + " was rated with "
                 + grade + " by " + user);
+    }
+
+    /**
+     * Method used to find the user that does the command
+     * @return
+     */
+    private User findUser() {
+        Database database = Database.getDatabase();
+        User soughtUser = database.getUsers().stream()
+                .filter(user1 -> user1.getUsername().equals(user))
+                .findAny().get();
+        return soughtUser;
     }
 }

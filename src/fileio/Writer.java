@@ -26,13 +26,11 @@ public final class Writer {
      * Transforms the output in a JSONObject
      *
      * @param id      of the action
-     * @param field   in case you need
      * @param message to be written
      * @return An JSON Object
      * @throws IOException in case of exceptions to reading / writing
      */
-    public JSONObject writeFile(final int id, final String field,
-                                final String message) throws IOException {
+    public JSONObject writeFile(final int id, final String message) {
         JSONObject object = new JSONObject();
         object.put(Constants.ID_STRING, id);
         object.put(Constants.MESSAGE, message);
