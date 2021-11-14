@@ -192,12 +192,40 @@ public class Query extends Action {
         addActorQueryToJson(sortList);
     }
 
+    /**
+     * checks if an author's description contains all the keywords of the
+     * query
+     * @param actor
+     * @return
+     */
     private boolean hasAllKeywords(final Actor actor) {
-        String lowerCaseDescription = actor.getDescription()
+        String description = actor.getDescription()
                                      .toLowerCase();
+
+
+
         for (String keyword
                 : filters.get(Constants.FILTER_WORDS_NR)) {
-            if (!lowerCaseDescription.contains(" " + keyword.toLowerCase() + " ")) {
+            int isFound = 0;
+            if (description.contains(" " + keyword.toLowerCase() + " ")) {
+                isFound = 1;
+            }
+            if (description.contains("-" + keyword.toLowerCase() + " ")) {
+                isFound = 1;
+            }
+            if (description.contains(" " + keyword.toLowerCase() + "-")) {
+                isFound = 1;
+            }
+            if (description.contains("-" + keyword.toLowerCase() + "-")) {
+                isFound = 1;
+            }
+            if (description.contains(" " + keyword.toLowerCase() + ",")) {
+                isFound = 1;
+            }
+            if (description.contains(" " + keyword.toLowerCase() + ".")) {
+                isFound = 1;
+            }
+            if (isFound == 0) {
                 return false;
             }
         }
